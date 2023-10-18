@@ -60,6 +60,30 @@ async function run() {
       res.send(result);
     });
 
+    app.put('/products/sProduct/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateProduct = req.body;
+      const product = {
+        $set: {
+          brand: updateProduct.brand,
+          type: updateProduct.type,
+          name: updateProduct.name,
+          description: updateProduct.description,
+          price: updateProduct.price,
+          rating: updateProduct.rating,
+          image: updateProduct.image,
+        },
+      };
+      const result = await productCollection.updateOne(
+        filter,
+        product,
+        options
+      );
+      res.send(result);
+    });
+
     console.log(
       'Pinged your deployment. You successfully connected to MongoDB!'
     );
