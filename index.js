@@ -26,6 +26,7 @@ async function run() {
 
     const productCollection = client.db('productDB').collection('product');
     const brandCollection = client.db('productDB').collection('brand');
+    const cardCollection = client.db('productDB').collection('card');
 
     app.get('/products/:brand', async (req, res) => {
       const brand = req.params.brand;
@@ -81,6 +82,18 @@ async function run() {
         product,
         options
       );
+      res.send(result);
+    });
+
+    app.get('/cards', async (req, res) => {
+      const cursor = cardCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    app.post('/cards', async (req, res) => {
+      const loadCardDetails = req.body;
+      console.log(loadCardDetails);
+      const result = await cardCollection.insertOne(loadCardDetails);
       res.send(result);
     });
 
