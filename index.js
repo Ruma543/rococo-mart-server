@@ -108,6 +108,11 @@ async function run() {
       const result = await cardCollection.updateOne(filter, options, updateDoc);
       res.send(result);
     });
+    app.get('/cards/:email', async (req, res) => {
+      const cursor = cardCollection.find({ email });
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
     console.log(
       'Pinged your deployment. You successfully connected to MongoDB!'
