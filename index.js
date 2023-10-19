@@ -108,9 +108,25 @@ async function run() {
       const result = await cardCollection.updateOne(filter, options, updateDoc);
       res.send(result);
     });
-    app.get('/cards/:email', async (req, res) => {
+    app.get('/cards/card/:email', async (req, res) => {
+      const email = req.body;
       const cursor = cardCollection.find({ email });
       const result = await cursor.toArray();
+      res.send(result);
+    });
+    app.get('/cards/card:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await cardCollection.findOne(query);
+      res.send(result);
+      // console.log(result);
+    });
+    app.delete('/deleteCard/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: new ObjectId(id) };
+      const result = await cardCollection.deleteOne(query);
+      console.log(result);
       res.send(result);
     });
 
