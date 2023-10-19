@@ -96,21 +96,21 @@ async function run() {
       res.send(result);
     });
 
-    app.patch('/cards', async (req, res) => {
-      const user = req.body;
-      const filter = { email: user.email };
-      const options = { upsert: true };
-      const updateDoc = {
-        $set: {
-          email: user.email,
-        },
-      };
-      const result = await cardCollection.updateOne(filter, options, updateDoc);
-      res.send(result);
-    });
+    // app.patch('/cards', async (req, res) => {
+    //   const user = req.body;
+    //   const filter = { email: user.email };
+    //   const options = { upsert: true };
+    //   const updateDoc = {
+    //     $set: {
+    //       email: user.email,
+    //     },
+    //   };
+    //   const result = await cardCollection.updateOne(filter, options, updateDoc);
+    //   res.send(result);
+    // });
     app.get('/cards/card/:email', async (req, res) => {
-      const email = req.body;
-      const cursor = cardCollection.find({ email });
+      const email = req.params.email;
+      const cursor = cardCollection.find({ email: email });
       const result = await cursor.toArray();
       res.send(result);
     });
@@ -119,7 +119,6 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await cardCollection.findOne(query);
       res.send(result);
-      // console.log(result);
     });
     app.delete('/deleteCard/:id', async (req, res) => {
       const id = req.params.id;
