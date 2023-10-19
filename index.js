@@ -9,7 +9,6 @@ app.use(cors());
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.hybcmzi.mongodb.net/?retryWrites=true&w=majority`;
-// console.log(uri);
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -91,9 +90,22 @@ async function run() {
       res.send(result);
     });
     app.post('/cards', async (req, res) => {
-      const loadCardDetails = req.body;
-      console.log(loadCardDetails);
-      const result = await cardCollection.insertOne(loadCardDetails);
+      const newCard = req.body;
+      console.log(newCard);
+      const result = await cardCollection.insertOne(newCard);
+      res.send(result);
+    });
+
+    app.patch('/cards', async (req, res) => {
+      const user = req.body;
+      const filter = { email: user.email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          email: user.email,
+        },
+      };
+      const result = await cardCollection.updateOne(filter, options, updateDoc);
       res.send(result);
     });
 
